@@ -2,8 +2,9 @@
   <div class="container" :class="stageClass">
     <div class="stage">
       <div v-if="!started" class="welcome">
-        <h1>{{ title }}</h1>
-        <p>{{ text }}</p>
+        <h1>Carrier Strike Group</h1>
+        <p class="lg">A CSG is an operational formation of the United States Navy. It is composed of roughly 7,500 personnel, an aircraft carrier, at least one cruiser, a destroyer squadron of at least two destroyers or frigates, and a carrier air wing of 65 to 70 aircraft.</p>
+        <p class="sm">A CSG is an operational formation of the United States Navy, composed personnel, an aircraft carrier, at least one cruiser, a destroyer squadron, and a carrier with aircraft.</p>
         <button class="start-button" @click="started = true">Take Tour</button>
       </div>
     
@@ -2841,8 +2842,8 @@
     </div>
     
     <div class="navbar" v-show="started">
-      <button :class="{'opaque': stage > 0}" class="nav-btn prev" @click="stage--">&larr;</button>
-      <button :class="{'opaque': stage < 5}" class="nav-btn next" @click="stage++">&rarr;</button>   
+      <button :class="{'opaque': stage > 0}" class="nav-btn prev" @click="prevStep">&larr;</button>
+      <button :class="{'opaque': stage < 5}" class="nav-btn next" @click="nextStep">&rarr;</button>   
     </div>
   </div>
 </template>
@@ -2862,14 +2863,6 @@ export default {
   },
 
   computed: {
-    title() {
-      return "Carrier Strike Group";
-    },
-
-    text() {
-      return "A carrier strike group (CSG) is an operational formation of the United States Navy. It is composed of roughly 7,500 personnel, an aircraft carrier, at least one cruiser, a destroyer squadron of at least two destroyers or frigates, and a carrier air wing of 65 to 70 aircraft. A carrier strike group also, on occasion, includes submarines, attached logistics ships and a supply ship.";
-    },
-
     stageClass() {
       return `stage-${this.stage}`;
     }
@@ -2879,6 +2872,21 @@ export default {
     restart() {
       this.stage = 0;
       this.started = false;
+    },
+
+    nextStep() {
+      if (this.stage < 5) {
+        return this.stage++;
+      }
+
+      this.stage = 5;
+    },
+
+    prevStep() {
+      if (this.stage > 0) {
+        return this.stage--;
+      }
+      this.stage = 0;
     }
   }
 };
@@ -2898,7 +2906,8 @@ export default {
 .stage {
   position: absolute;
   width: 100%;
-  top: 0;
+  top: 50%;
+  transform: translateY(-50%);
   left: 0;
 }
 
@@ -2914,8 +2923,8 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  width: 60%;
-  padding-left: 1rem;
+  width: 40%;
+  padding-left: 0.5rem;
 }
 
 .text-overlay h3 {
@@ -2929,7 +2938,8 @@ export default {
 
 .text-overlay ul {
   padding: 0;
-  margin-left: 1rem;
+  margin-left: 0.75rem;
+  margin-top: 0.25rem;
 }
 .text-overlay li {
   margin: 0.25rem 0;
@@ -2951,6 +2961,12 @@ export default {
   padding: 0.5rem;
   border-radius: 4px;
   text-transform: uppercase;
+}
+
+.restart button:hover {
+  background: #fff;
+  color: dodgerblue;
+  cursor: pointer;
 }
 
 .restart.show {
@@ -2978,9 +2994,13 @@ export default {
   margin: 2rem auto 0;
   font-weight: 700;
   border-radius: 4px;
+  border: none;
+  box-shadow: 2px 2px 4px #333;
 }
 
 .nav-btn {
+  display: flex;
+  justify-content: center;
   background: #fff;
   color: #333;
   font-weight: 700;
@@ -2990,6 +3010,12 @@ export default {
   border-top: 1px solid #333;
   transition: 0.3s;
   opacity: 0;
+  margin: 0;
+}
+
+.nav-btn:hover {
+  color: dodgerblue;
+  cursor: pointer;
 }
 
 .nav-btn.opaque {
@@ -3005,6 +3031,7 @@ export default {
 }
 
 .welcome h1 {
+  margin-top: 0;
   text-align: center;
 }
 
@@ -3078,6 +3105,11 @@ export default {
 
 .container.stage-2 #destroyer {
   transform: translate3d(0, 0, 0);
+  animation-name: bobbing;
+  animation-direction: alternate;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
 }
 
 .container.stage-2 #airplanes-in-sky {
@@ -3086,10 +3118,20 @@ export default {
 
 .container.stage-3 #cruiser-right {
   transform: translate3d(0, 0, 0);
+  animation-name: bobbing;
+  animation-direction: alternate;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
 }
 
 .container.stage-3 #cruiser-left {
   transform: translate3d(0, 0, 0);
+  animation-name: bobbing;
+  animation-direction: alternate;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
 }
 
 .container.stage-3 #carrier {
@@ -3098,6 +3140,11 @@ export default {
 
 .container.stage-3 #destroyer {
   transform: translate3d(0, 0, 0);
+  animation-name: bobbing;
+  animation-direction: alternate;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
 }
 
 .container.stage-3 #airplanes-in-sky {
@@ -3199,6 +3246,31 @@ svg {
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes bobbing {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(0, 0, 0) scale(1.005);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  body {
+    font-size: 80%;
+  }
+
+  .lg {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 481px) {
+  .sm {
+    display: none;
   }
 }
 </style>
